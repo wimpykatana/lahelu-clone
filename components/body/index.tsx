@@ -1,5 +1,5 @@
 import { View, Text, FlatList, Image, ActivityIndicator, Button, TouchableOpacity } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import axios from 'axios'
 import PostItem from '../smallComponents/postItem'
 import { Post } from '../../types'
@@ -10,6 +10,9 @@ const index = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [hasMore, setHasMore] = useState(true);
     const [activeTab, setActiveTab] = useState("1");
+    const viewabilityConfig = useRef({
+        itemVisiblePercentThreshold: 50,
+    });
 
     const changeTab = (tab:string) => {
         setActiveTab(tab);
@@ -52,7 +55,14 @@ const index = () => {
         ) : null;
     };
 
-    
+    const onViewableItemsChanged = useCallback(({ viewableItems }: { viewableItems: Array<{ index: number | null }> }) => {
+        setPosts((prevPosts) =>
+            prevPosts.map((post, index) => ({
+                ...post,
+                isVisible: viewableItems.some((item) => item.index === index),
+            }))
+        );
+    }, []);
 
     return (
         <View className='w-full bg-black flex'>
@@ -79,10 +89,12 @@ const index = () => {
                 <FlatList
                     data={posts}
                     keyExtractor={(item, index) => index.toString()}
-                    renderItem={({ item }) => <PostItem item={item} />}
+                    renderItem={({ item }) => <PostItem item={item} isVisible={item.isVisible} />}
                     onEndReached={getData}
                     ListFooterComponent={renderLoader}
                     onEndReachedThreshold={0.5}
+                    onViewableItemsChanged={onViewableItemsChanged}
+                    viewabilityConfig={viewabilityConfig.current}
                 />
             </View>
         </View>

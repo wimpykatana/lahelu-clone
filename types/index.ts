@@ -1,4 +1,5 @@
 export interface Post {
+    isVisible: boolean;
     postID: string;
     userID: string;
     title: string;

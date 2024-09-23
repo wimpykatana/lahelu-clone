@@ -5,8 +5,18 @@ import { Post } from '../../types'
 import Hastag from './hastag'
 
 
-const PostItem = ({ item }: { item: Post }) => {
+const PostItem = ({ item, isVisible }: { item: Post, isVisible: boolean }) => {
     const videoRef = useRef<Video>(null);
+
+    useEffect(() => {
+        if (videoRef.current) {
+            if (isVisible) {
+                videoRef.current.playAsync();
+            } else {
+                videoRef.current.pauseAsync();
+            }
+        }
+    }, [isVisible]);
 
     return (
         <View className='mt-1 py-4 mb-3 bg-gray-800'>
