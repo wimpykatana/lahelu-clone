@@ -1,3 +1,6 @@
+# Build APK
+https://expo.dev/accounts/wimpykatana/projects/lahelu-clone/builds/f2c7dd9b-15de-47bc-84b5-81aded632aa3
+
 # Welcome to your Expo app 👋
 
 This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
